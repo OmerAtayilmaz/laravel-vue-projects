@@ -14,4 +14,5 @@ Route::prefix("/item")->controller(ItemController::class)->group(function(){
     Route::post("/store","store");
     Route::put("/{id}","update");
     Route::delete("/{id}","destroy");
+    Route::put("/edit/{id}","edit");
 });

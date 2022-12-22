@@ -1,12 +1,27 @@
 <template>
-    <div>
-
-        <span :class="[item.status=='completed'?'completed':'','itemText']"> {{item.name}}</span>
-        <button  @click="updateCheck()" class="edit">
-            <i class="fas fa-check-square"></i>
-        </button> <button @click="removeItem()" class="trashcan">
-            <i class="fas fa-trash"></i>
-        </button>
+    <div class="container">
+        <div class="text">
+            <div v-if="item.status==='edit'">
+                <span :class="[item.status=='completed'?'completed':'','itemText']"><input v-model="item.name"/> </span>
+            </div>
+            <div v-else>
+                <span :class="[item.status=='completed'?'completed':'','itemText']">{{item.name}}</span>
+            </div>
+        </div>
+        <div>
+            <button  @click="updateCheck()" class="edit">
+                <i class="fas fa-check-square"></i>
+            </button>
+            <button @click="removeItem()" class="trashcan">
+                <i class="fas fa-trash"></i>
+            </button>
+            <button v-if="item.status!=='edit'" @click="editItem()" class="trashcan">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button v-else @click="saveItem()" class="trashcan">
+                <i class="fas fa-save"></i>
+            </button>
+        </div>
     </div>
 </template>
 <script>
@@ -33,10 +48,35 @@ export default {
                 .then(res=>res.status==200&&this.$emit("itemchanged"))
                 .catch(err=>console.log(err));
         }
+        ,
+        editItem(){
+            if(this.item.status!=='edit')
+                this.item.status='edit';
+            else
+                this.item.status=''
+        },saveItem(){
+            console.log(this.item.id);
+            console.log(this.item);
+            console.log(`api/item/edit/${this.item.id}`)
+            axios.put("api/item/edit/"+this.item.id,{name:this.item.name})
+                .then(res=>{
+                    console.log(res);
+                })
+                .catch(err=>{
+                    console.log(err);
+                })
+            this.item.status='task';
+        }
     }
 }
 </script>
 <style scoped>
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+}
 .trashcan, .edit{
     background: #e6e6e6;
     border:none;
@@ -50,11 +90,7 @@ export default {
     font-size:1.5rem;
     color: #31e131;
 }
-.item{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+
 .completed{
     text-decoration: line-through;
     color:#999;
@@ -64,5 +100,14 @@ export default {
     margin-left: 20px;
     font-size: 18px;
     font-weight: 200;
+}
+.container input{
+    width: 600px;
+    height: 30px;
+    border-radius: 12px;
+    text-indent: 12px;
+    font-size: 18px;
+    outline: none;
+    border:none;
 }
 </style>

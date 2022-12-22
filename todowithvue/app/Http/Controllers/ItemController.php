@@ -46,4 +46,14 @@ class ItemController extends Controller
         }
         return "Item not found.";
     }
+    public function edit(Request $request,$id){
+        $existingItem=Item::find($id);
+        if($existingItem){
+            $existingItem->name=$request->name;
+            $existingItem->save();
+            return $existingItem;
+        }
+        return response("Not Found",404)->header('Content-Type', 'application/json');
+
+    }
 }

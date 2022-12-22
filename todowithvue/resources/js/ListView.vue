@@ -1,7 +1,9 @@
 <template>
-    <div>
-       <div class="items" v-for="(item,index)  in items"  :key="index">
-           <list-item :item="item" v-if="item.status!='deleted'" class="item" v-on:itemchanged="$emit('reloadlist')"/>
+    <div >
+       <div  v-for="(item,index)  in items"  :key="index" >
+           <span  class="items"  v-if="item.status!='deleted'">
+                <list-item :item="item" class="item" v-on:itemchanged="$emit('reloadlist')"/>
+           </span>
        </div>
     </div>
 </template>
