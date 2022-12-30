@@ -9,7 +9,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get("/validation-example",[ItemController::class,"validation_example"]);
+Route::post("/validation-example",[ItemController::class,"validationform"])->name("validationPost");
 Route::get("/items",[ItemController::class,'index']);
+
 Route::prefix("/item")->controller(ItemController::class)->group(function(){
     Route::post("/store","store");
     Route::put("/{id}","update");
